@@ -9,11 +9,8 @@ using int32 = int;
 constexpr int32 WORD_LENGTH = 9;
 constexpr int32 GUESS_COUNT = 5;
 
-FBullCowGame game;
+// Game instance
+FBullCowGame bcGame;
 
 void PrintIntro();
-//void PlayGame();
-//std::string GetGuess_CIN();
-//std::string GetGuess_GetLine();
-//void RepeatGuess(std::string guess);
 bool AskToPlayAgain();
