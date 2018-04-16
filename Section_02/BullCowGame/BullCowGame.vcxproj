@@ -116,10 +116,13 @@
   <ItemGroup>
     <ClCompile Include="FBullCowGame.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="WordReverse.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FBullCowGame.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="UnrealDefinitions.h" />
+    <ClInclude Include="WordReverse.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

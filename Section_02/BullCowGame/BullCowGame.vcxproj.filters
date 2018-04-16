@@ -21,12 +21,21 @@
     <ClCompile Include="FBullCowGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WordReverse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FBullCowGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnrealDefinitions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WordReverse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

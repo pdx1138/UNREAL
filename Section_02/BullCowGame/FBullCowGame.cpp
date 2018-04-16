@@ -75,6 +75,8 @@ FBullCowCount FBullCowGame::SubmitGuess(FString guess)
 // Repeat the user's guess
 void FBullCowGame::RepeatGuess() const {
 	std::cout << "You guessed: " << this->myCurrentGuess << std::endl;
+
+	return;
 }
 
 void FBullCowGame::PlayGame() {
@@ -176,4 +178,29 @@ bool FBullCowGame::IsIsogram(FString word) const {
 	}
 
 	return true;
+}
+
+bool FBullCowGame::ReplayGame() {
+	std::string response = "";
+	std::cout << "Would you like to play again?\n";
+	std::cout << "Y/N >> ";
+	std::getline(std::cin, response);
+
+	return ((response[0] == 'Y' || response[0] == 'y') ? true : false);
+}
+
+void FBullCowGame::PrintGameIntro() {
+	system("cls");
+
+	std::cout << "Welcome to Bulls and Cows, a fun word game.\n";
+	std::cout << std::endl;
+	std::cout << "          }   {         ___ " << std::endl;
+	std::cout << "          (o o)        (o o) " << std::endl;
+	std::cout << "   /-------\\ /          \\ /-------\\ " << std::endl;
+	std::cout << "  / | BULL |O            O| COW  | \\ " << std::endl;
+	std::cout << " *  |-,--- |              |------|  * " << std::endl;
+	std::cout << "    ^      ^              ^      ^ " << std::endl;
+	std::cout << "Can you think of the " << this->GetHiddenWord().length() << " letter isogram I'm thinking of?\n";
+
+	return;
 }

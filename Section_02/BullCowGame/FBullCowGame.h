@@ -6,12 +6,7 @@
 #include <iostream>
 #include <string>
 #include <map>
-
-// Unreal friendly syntax for #define and using
-#define TMap std::map
-
-using FString = std::string;
-using int32 = int;
+#include "UnrealDefinitions.h"
 
 constexpr int FBC_GAME_MAX_TRIES = 8;
 const FString HIDDEN_WORD = "ask";
@@ -45,10 +40,12 @@ class FBullCowGame {
 		bool IsGameWon() const;
 		EGuessStatus CheckGuessValidity(FString guess) const;
 		FBullCowCount SubmitGuess(FString guess);
+		bool ReplayGame();
 
 		void PlayGame();
 		void Reset(); 
 		void GameSummary();
+		void PrintGameIntro();
 
 	private:
 		int32 myCurrentTry;
