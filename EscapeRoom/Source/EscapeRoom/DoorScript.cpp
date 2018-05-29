@@ -20,9 +20,10 @@ void UDoorScript::BeginPlay()
 {
 	Super::BeginPlay();
 
-	AActor* thisOwner = GetOwner();
-	FRotator newVec = FRotator(0.0f, 70.0f, 0.0f);
-	thisOwner->SetActorRotation(newVec);
+	if (actorThatOpens == nullptr) {
+		
+		actorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
+	}
 }
 
 
@@ -31,6 +32,24 @@ void UDoorScript::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	if (presurePlate != nullptr) {
+		if (presurePlate->IsOverlappingActor(actorThatOpens)) {
+			OpenDoor();
+		}
+		else {
+			CloseDoor();
+		}
+	}
 }
 
+void UDoorScript::OpenDoor() {
+	/*AActor* thisOwner = GetOwner();*/
+	FRotator newVec = FRotator(0.0f, openAngle, 0.0f);
+	GetOwner()->SetActorRotation(newVec);
+}
+
+void UDoorScript::CloseDoor() {
+	/*AActor* thisOwner = GetOwner();*/
+	FRotator newVec = FRotator(0.0f, 0.0f, 0.0f);
+	GetOwner()->SetActorRotation(newVec);
+}
