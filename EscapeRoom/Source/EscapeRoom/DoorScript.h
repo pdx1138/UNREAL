@@ -37,4 +37,15 @@ class ESCAPEROOM_API UDoorScript : public UActorComponent
 
 		UPROPERTY(EditAnywhere)
 		AActor* actorThatOpens;
+
+		UPROPERTY(EditAnywhere)
+		float doorCloseDelay = 1.0f;
+
+		UPROPERTY(EditAnywhere)
+		float lastDoorOpenTime;
+
+		UPROPERTY(VisibleAnywhere)
+		bool isOpen;
+
+		AActor* owner;		
 };
