@@ -45,7 +45,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	FVector lineTraceEnd = pvLocation + pvRotation.Vector() * maxReach;
 	DrawDebugLine(GetWorld(), pvLocation, lineTraceEnd, debugLineColor, false, 0.0f, 0.0f, 10.0f);
 	
-	// WTF did we hit??
+	//GetWorld()->
 
 
 
