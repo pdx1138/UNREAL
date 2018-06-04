@@ -22,6 +22,13 @@ void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	physicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	if (physicsHandle) {
+
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("%s missing PhysicsHandleComponent"), *(GetOwner()->GetName()));
+	}
 }
 
 
@@ -30,24 +37,23 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
-	// Get player viewport
+	/// Get player viewport
 	FVector pvLocation;
 	FRotator pvRotation;
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT pvLocation, OUT pvRotation);
 	//UE_LOG(LogTemp, Warning, TEXT("Location: %s || Rotation: %s"), *pvLocation.ToString(), *pvRotation.ToString());
 
-	// ray-cast maxDist to obj
-	/*FVector lineTraceEnd = pvLocation + FVector(0.0f, 0.0f, maxReach);*/
-	/*DrawDebubLine(
-		GetWorld(),
-
-	);*/
+	/// ray-cast maxDist to obj
 	FVector lineTraceEnd = pvLocation + pvRotation.Vector() * maxReach;
 	DrawDebugLine(GetWorld(), pvLocation, lineTraceEnd, debugLineColor, false, 0.0f, 0.0f, 10.0f);
 	
-	//GetWorld()->
+	FHitResult hit;
+	FCollisionQueryParams traceParameters(FName(TEXT("")), false, GetOwner());
+	GetWorld()->LineTraceSingleByObjectType(OUT hit, pvLocation, lineTraceEnd, FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), traceParameters);
 
+	AActor* actorHit = hit.GetActor();
 
-
+	if (actorHit) {
+		UE_LOG(LogTemp, Warning, TEXT("Line Trace Hit: %s"), *(actorHit->GetName()));
+	}
 }
-

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/World.h"
 #include "Components/ActorComponent.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Grabber.generated.h"
 
 
@@ -31,5 +32,6 @@ class ESCAPEROOM_API UGrabber : public UActorComponent
 
 		UPROPERTY(EditAnywhere)
 		FColor debugLineColor = FColor(255.0f, 0.0f, 0.0f);
-	
+		
+		UPhysicsHandleComponent* physicsHandle = nullptr;
 };
