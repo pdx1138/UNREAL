@@ -3,8 +3,6 @@
 #include "Grabber.h"
 #include "GameFramework/Actor.h"
 #include "DrawDebugHelpers.h"
-/*
-#define OUT*/  
 
 // Sets default values for this component's properties
 UGrabber::UGrabber()
@@ -31,6 +29,18 @@ void UGrabber::BeginPlay()
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	if (physicsHandle->GrabbedComponent) {
+		FVector pvLocation;
+		FRotator pvRotation;
+		GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT pvLocation, OUT pvRotation);
+		//UE_LOG(LogTemp, Warning, TEXT("Location: %s || Rotation: %s"), *pvLocation.ToString(), *pvRotation.ToString());
+
+		/// ray-cast maxDist to obj
+		FVector lineTraceEnd = pvLocation + pvRotation.Vector() * maxReach;
+
+		physicsHandle->SetTargetLocation(lineTraceEnd);
+	}
 }
 
 /// PRIVATE FUNCTION DECLARATIONS *******************************************************************************************************************************************************
@@ -39,16 +49,20 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 void UGrabber::Grab() {
 	UE_LOG(LogTemp, Warning, TEXT("%s is Grabbing"), *(GetOwner()->GetName()));
 
-	GetFirstPhsyicsBodyInReach();
+	auto hitResult = GetFirstPhsyicsBodyInReach();
+	UPrimitiveComponent* componentToGrab = hitResult.GetComponent();
+	auto actorHit = hitResult.GetActor();
 
-
+	if (actorHit) {
+		physicsHandle->GrabComponent(componentToGrab, NAME_None, componentToGrab->GetOwner()->GetActorLocation(), true);
+	}	
 }
 
 // Released any grabbed item
 void UGrabber::Release() {
 	UE_LOG(LogTemp, Warning, TEXT("%s is Releasing"), *(GetOwner()->GetName()));
 
-	// TODO:: release/remove UPhysicsHandle
+	physicsHandle->ReleaseComponent();
 }
 
 // Set (physicsHandle) variable
