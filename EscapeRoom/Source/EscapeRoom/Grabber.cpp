@@ -3,8 +3,8 @@
 #include "Grabber.h"
 #include "GameFramework/Actor.h"
 #include "DrawDebugHelpers.h"
-
-#define OUT  
+/*
+#define OUT*/  
 
 // Sets default values for this component's properties
 UGrabber::UGrabber()
@@ -21,14 +21,9 @@ UGrabber::UGrabber()
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	physicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
-	if (physicsHandle) {
 
-	}
-	else {
-		UE_LOG(LogTemp, Error, TEXT("%s missing PhysicsHandleComponent"), *(GetOwner()->GetName()));
-	}
+	SetPhysicsHandleComponent();
+	SetInputComponent();
 }
 
 
@@ -36,8 +31,54 @@ void UGrabber::BeginPlay()
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
-	/// Get player viewport
+}
+
+/// PRIVATE FUNCTION DECLARATIONS *******************************************************************************************************************************************************
+
+// Ray-cast and grab items in reach
+void UGrabber::Grab() {
+	UE_LOG(LogTemp, Warning, TEXT("%s is Grabbing"), *(GetOwner()->GetName()));
+
+	GetFirstPhsyicsBodyInReach();
+
+
+}
+
+// Released any grabbed item
+void UGrabber::Release() {
+	UE_LOG(LogTemp, Warning, TEXT("%s is Releasing"), *(GetOwner()->GetName()));
+
+	// TODO:: release/remove UPhysicsHandle
+}
+
+// Set (physicsHandle) variable
+void UGrabber::SetPhysicsHandleComponent() {
+	physicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	if (physicsHandle) {
+		UE_LOG(LogTemp, Warning, TEXT("%s UPhysicsHandleComponent found"), *(GetOwner()->GetName()));
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("%s missing UPhysicsHandleComponent"), *(GetOwner()->GetName()));
+	}
+}
+
+// Set (inputComponent) variable
+void UGrabber::SetInputComponent() {
+	inputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+	if (inputComponent) {
+		UE_LOG(LogTemp, Warning, TEXT("%s UInputComponent found"), *(GetOwner()->GetName()));
+
+		/// Bind input Axis
+		inputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+		inputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Release);
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("%s missing UInputComponent"), *(GetOwner()->GetName()));
+	}
+}
+
+// Return hit for first physics body in reach
+const FHitResult UGrabber::GetFirstPhsyicsBodyInReach() {
 	FVector pvLocation;
 	FRotator pvRotation;
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT pvLocation, OUT pvRotation);
@@ -45,8 +86,8 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 
 	/// ray-cast maxDist to obj
 	FVector lineTraceEnd = pvLocation + pvRotation.Vector() * maxReach;
-	DrawDebugLine(GetWorld(), pvLocation, lineTraceEnd, debugLineColor, false, 0.0f, 0.0f, 10.0f);
-	
+	//DrawDebugLine(GetWorld(), pvLocation, lineTraceEnd, debugLineColor, false, 0.0f, 0.0f, 10.0f);
+
 	FHitResult hit;
 	FCollisionQueryParams traceParameters(FName(TEXT("")), false, GetOwner());
 	GetWorld()->LineTraceSingleByObjectType(OUT hit, pvLocation, lineTraceEnd, FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), traceParameters);
@@ -56,4 +97,6 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	if (actorHit) {
 		UE_LOG(LogTemp, Warning, TEXT("Line Trace Hit: %s"), *(actorHit->GetName()));
 	}
+
+	return hit;
 }

@@ -5,9 +5,11 @@
 #include "CoreMinimal.h"
 #include "Engine/World.h"
 #include "Components/ActorComponent.h"
+#include "Components/InputComponent.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Grabber.generated.h"
 
+#define OUT
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ESCAPEROOM_API UGrabber : public UActorComponent
@@ -34,4 +36,20 @@ class ESCAPEROOM_API UGrabber : public UActorComponent
 		FColor debugLineColor = FColor(255.0f, 0.0f, 0.0f);
 		
 		UPhysicsHandleComponent* physicsHandle = nullptr;
+		UInputComponent* inputComponent = nullptr;
+
+		// Ray-cast and grab items in reach
+		void Grab();
+
+		// Released any grabbed item
+		void Release();
+
+		// Set (physicsHandle) variable
+		void SetPhysicsHandleComponent();
+
+		// Set (inputComponent) variable
+		void SetInputComponent();
+
+		// Return hit for first physics body in reach
+		const FHitResult GetFirstPhsyicsBodyInReach();
 };
