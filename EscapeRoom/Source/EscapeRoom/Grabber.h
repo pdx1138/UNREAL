@@ -31,7 +31,7 @@ class ESCAPEROOM_API UGrabber : public UActorComponent
 	private:		
 		UPROPERTY(EditAnywhere)
 		float maxReach = 100.0f;
-
+		
 		UPROPERTY(EditAnywhere)
 		FColor debugLineColor = FColor(255.0f, 0.0f, 0.0f);
 		
@@ -52,4 +52,10 @@ class ESCAPEROOM_API UGrabber : public UActorComponent
 
 		// Return hit for first physics body in reach
 		const FHitResult GetFirstPhsyicsBodyInReach();
+
+		// Get the start of our reach
+		FVector GetLineTraceStart();
+
+		// Get the end of our reach
+		FVector GetLineTraceEnd();
 };
