@@ -56,8 +56,9 @@ void UDoorScript::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 
 void UDoorScript::OpenDoor() {
 	isOpen = true;
-	owner->SetActorRotation(FRotator(0.0f, openAngle, 0.0f));
+	/*owner->SetActorRotation(FRotator(0.0f, openAngle, 0.0f));*/
 	lastDoorOpenTime = GetWorld()->GetTimeSeconds();
+	OnOpenRequest.Broadcast();
 }
 
 void UDoorScript::CloseDoor() {
@@ -78,8 +79,10 @@ float UDoorScript::GetTotalMassOfActorsOnPlate() {
 
 		// Iterate through them and add their mass
 		for (const auto* actor : overlappingActors) {
-			UE_LOG(LogTemp, Warning, TEXT("Calculating Mass of Object %s"), *(actor->GetName()));
-			totalMass += actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+			float tempMass = actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+			UE_LOG(LogTemp, Warning, TEXT("Calculating Mass of Object %s: %f"), *(actor->GetName()), tempMass);
+			/*totalMass += actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();*/
+			totalMass += tempMass;
 		}
 	}
 	//pressurePlate->GetOverlappingActors(OUT overlappingActors);

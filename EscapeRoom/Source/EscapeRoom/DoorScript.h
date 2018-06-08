@@ -11,6 +11,8 @@
 
 #define OUT
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenRequest);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ESCAPEROOM_API UDoorScript : public UActorComponent
 {
@@ -21,6 +23,9 @@ class ESCAPEROOM_API UDoorScript : public UActorComponent
 		UDoorScript();
 		void OpenDoor();
 		void CloseDoor();
+
+		UPROPERTY(BlueprintAssignable)
+		FOnOpenRequest OnOpenRequest;
 
 	protected:
 		// Called when the game starts
