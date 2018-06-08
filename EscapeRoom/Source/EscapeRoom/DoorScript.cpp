@@ -22,8 +22,7 @@ void UDoorScript::BeginPlay()
 
 	owner = GetOwner();
 
-	if (actorThatOpens == nullptr) {
-		
+	if (actorThatOpens == nullptr) {		
 		actorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 	}
 }
@@ -34,13 +33,16 @@ void UDoorScript::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (presurePlate == nullptr) {
+	if (pressurePlate == nullptr) {
 		return;
 	}
 
-	if (presurePlate->IsOverlappingActor(actorThatOpens)) {
+	/*if (pressurePlate->IsOverlappingActor(actorThatOpens)) {
 		OpenDoor();
-		lastDoorOpenTime = GetWorld()->GetTimeSeconds();
+	}
+	else*/
+	if (GetTotalMassOfActorsOnPlate() > 65.0f) {
+		OpenDoor();
 	}
 		
 	if (isOpen && (GetWorld()->GetTimeSeconds() - lastDoorOpenTime > doorCloseDelay)) {
@@ -51,9 +53,27 @@ void UDoorScript::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 void UDoorScript::OpenDoor() {
 	isOpen = true;
 	owner->SetActorRotation(FRotator(0.0f, openAngle, 0.0f));
+	lastDoorOpenTime = GetWorld()->GetTimeSeconds();
 }
 
 void UDoorScript::CloseDoor() {
 	isOpen = false;
 	owner->SetActorRotation(FRotator(0.0f, 0.0f, 0.0f));
+}
+
+float UDoorScript::GetTotalMassOfActorsOnPlate() {
+	float totalMass = 0.0f;
+
+	// Find all the overlapping actors
+	TArray<AActor*> overlappingActors;
+	pressurePlate->GetOverlappingActors(OUT overlappingActors);
+
+	// Iterate through them and add their mass
+	for (const auto* actor : overlappingActors) {
+		UE_LOG(LogTemp, Warning, TEXT("Calculating Mass of Object %s"), *(actor->GetName()));
+		totalMass += actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Total Mass of all Objects %f"), totalMass);
+	return totalMass;
 }

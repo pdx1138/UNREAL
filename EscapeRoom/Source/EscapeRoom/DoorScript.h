@@ -5,9 +5,11 @@
 #include "CoreMinimal.h"
 #include "Engine/TriggerVolume.h"
 #include "Components/ActorComponent.h"
+#include "Components/PrimitiveComponent.h"
 #include "Engine/World.h"
 #include "DoorScript.generated.h"
 
+#define OUT
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ESCAPEROOM_API UDoorScript : public UActorComponent
@@ -31,10 +33,10 @@ class ESCAPEROOM_API UDoorScript : public UActorComponent
 		
 	private:
 		UPROPERTY(VisibleAnywhere)
-		float openAngle = 70.0f;
+		float openAngle = 90.0f;
 
 		UPROPERTY(EditAnywhere)
-		ATriggerVolume* presurePlate;
+		ATriggerVolume* pressurePlate;
 
 		UPROPERTY(EditAnywhere)
 		AActor* actorThatOpens;
@@ -48,5 +50,7 @@ class ESCAPEROOM_API UDoorScript : public UActorComponent
 		UPROPERTY(VisibleAnywhere)
 		bool isOpen;
 
-		AActor* owner;		
+		AActor* owner;
+
+		float GetTotalMassOfActorsOnPlate();
 };
