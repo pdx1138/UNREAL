@@ -25,6 +25,10 @@ void UDoorScript::BeginPlay()
 	if (actorThatOpens == nullptr) {		
 		actorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 	}
+
+	if (pressurePlate.Num() == 0) {
+		UE_LOG(LogTemp, Error, TEXT("%s needs a pressure plate assigned"), *(GetOwner()->GetName()));
+	}
 }
 
 
@@ -33,7 +37,7 @@ void UDoorScript::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (pressurePlate == nullptr) {
+	if (pressurePlate.Num() == 0) {
 		return;
 	}
 
@@ -64,16 +68,28 @@ void UDoorScript::CloseDoor() {
 float UDoorScript::GetTotalMassOfActorsOnPlate() {
 	float totalMass = 0.0f;
 
+	if (pressurePlate.Num() == 0) { return 0.0f; }
+
 	// Find all the overlapping actors
-	TArray<AActor*> overlappingActors;
-	pressurePlate->GetOverlappingActors(OUT overlappingActors);
+	/*TArray<AActor*> overlappingActors;*/
+	for (const auto* pp : pressurePlate) {
+		TArray<AActor*> overlappingActors;
+		pp->GetOverlappingActors(OUT overlappingActors);
 
-	// Iterate through them and add their mass
-	for (const auto* actor : overlappingActors) {
-		UE_LOG(LogTemp, Warning, TEXT("Calculating Mass of Object %s"), *(actor->GetName()));
-		totalMass += actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+		// Iterate through them and add their mass
+		for (const auto* actor : overlappingActors) {
+			UE_LOG(LogTemp, Warning, TEXT("Calculating Mass of Object %s"), *(actor->GetName()));
+			totalMass += actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+		}
 	}
+	//pressurePlate->GetOverlappingActors(OUT overlappingActors);
 
-	UE_LOG(LogTemp, Warning, TEXT("Total Mass of all Objects %f"), totalMass);
+	//// Iterate through them and add their mass
+	//for (const auto* actor : overlappingActors) {
+	//	UE_LOG(LogTemp, Warning, TEXT("Calculating Mass of Object %s"), *(actor->GetName()));
+	//	totalMass += actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+	//}
+
+	//UE_LOG(LogTemp, Warning, TEXT("Total Mass of all Objects %f"), totalMass);
 	return totalMass;
 }

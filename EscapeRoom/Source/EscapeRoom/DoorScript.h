@@ -36,16 +36,16 @@ class ESCAPEROOM_API UDoorScript : public UActorComponent
 		float openAngle = 90.0f;
 
 		UPROPERTY(EditAnywhere)
-		ATriggerVolume* pressurePlate;
+		TArray<ATriggerVolume*> pressurePlate;
 
 		UPROPERTY(EditAnywhere)
-		AActor* actorThatOpens;
+		AActor* actorThatOpens = nullptr;
 
 		UPROPERTY(EditAnywhere)
 		float doorCloseDelay = 1.0f;
 
 		UPROPERTY(EditAnywhere)
-		float lastDoorOpenTime;
+		float lastDoorOpenTime = 0.0f;
 
 		UPROPERTY(VisibleAnywhere)
 		bool isOpen;
