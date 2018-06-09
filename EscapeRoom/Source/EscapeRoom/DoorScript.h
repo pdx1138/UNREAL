@@ -11,7 +11,7 @@
 
 #define OUT
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenRequest);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDoorEvent);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ESCAPEROOM_API UDoorScript : public UActorComponent
@@ -21,11 +21,12 @@ class ESCAPEROOM_API UDoorScript : public UActorComponent
 	public:	
 		// Sets default values for this component's properties
 		UDoorScript();
-		void OpenDoor();
-		void CloseDoor();
 
 		UPROPERTY(BlueprintAssignable)
-		FOnOpenRequest OnOpenRequest;
+		FDoorEvent OnOpen;
+
+		UPROPERTY(BlueprintAssignable)
+		FDoorEvent OnClose;
 
 	protected:
 		// Called when the game starts
@@ -37,9 +38,6 @@ class ESCAPEROOM_API UDoorScript : public UActorComponent
 
 		
 	private:
-		UPROPERTY(VisibleAnywhere)
-		float openAngle = 90.0f;
-
 		UPROPERTY(EditAnywhere)
 		TArray<ATriggerVolume*> pressurePlate;
 
@@ -47,13 +45,7 @@ class ESCAPEROOM_API UDoorScript : public UActorComponent
 		AActor* actorThatOpens = nullptr;
 
 		UPROPERTY(EditAnywhere)
-		float doorCloseDelay = 1.0f;
-
-		UPROPERTY(EditAnywhere)
-		float lastDoorOpenTime = 0.0f;
-
-		UPROPERTY(VisibleAnywhere)
-		bool isOpen;
+		float triggerMass = 65.0f;
 
 		AActor* owner;
 
